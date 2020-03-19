@@ -65,6 +65,7 @@ include_directories(
 )
 
 add_library(mavros_extras
+  src/plugins/morphing.cpp
   src/plugins/adsb.cpp
   src/plugins/cam_imu_sync.cpp
   src/plugins/companion_process_status.cpp
