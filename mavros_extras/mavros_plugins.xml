@@ -1,7 +1,7 @@
 <library path="lib/libmavros_extras">
-        <class name="morphing" type="mavros::extra_plugins::MorphingPlugin" base_class_type="mavros::plugin::PluginBase">
-                <description>Access to morphing state.</description>
-        </class>
+    <class name="morphing" type="mavros::extra_plugins::MorphingPlugin" base_class_type="mavros::plugin::PluginBase">
+    	<description>Access to morphing state.</description>
+    </class>
 	<class name="adsb" type="mavros::extra_plugins::ADSBPlugin" base_class_type="mavros::plugin::PluginBase">
 		<description>Publish/subscribe to the location and information of an ADS-B vehicle.</description>
 	</class>
