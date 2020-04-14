@@ -65,7 +65,6 @@ include_directories(
 )
 
 add_library(mavros_extras
-  src/plugins/morphing.cpp
   src/plugins/adsb.cpp
   src/plugins/cam_imu_sync.cpp
   src/plugins/companion_process_status.cpp
@@ -77,6 +76,7 @@ add_library(mavros_extras
   src/plugins/landing_target.cpp
   src/plugins/log_transfer.cpp
   src/plugins/mocap_pose_estimate.cpp
+  src/plugins/morph_status.cpp
   src/plugins/obstacle_distance.cpp
   src/plugins/odom.cpp
   src/plugins/px4flow.cpp

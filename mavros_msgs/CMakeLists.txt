@@ -33,6 +33,7 @@ add_message_files(
   LogEntry.msg
   ManualControl.msg
   Mavlink.msg
+  MorphStatus.msg
   MountControl.msg
   OpticalFlowRad.msg
   OverrideRCIn.msg
