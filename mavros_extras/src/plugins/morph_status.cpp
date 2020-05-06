@@ -17,7 +17,6 @@
 #include <mavros/mavros_plugin.h>
 #include <pluginlib/class_list_macros.h>
 #include <iostream>
-#include <std_msgs/UInt8.h>
 #include <mavros_msgs/MorphStatus.h>
 
 namespace mavros {
@@ -37,14 +36,7 @@ public:
     void initialize(UAS &uas_)
     {
         PluginBase::initialize(uas_);
-        morph_mode_sub = nh.subscribe("mode", 10, &MorphPlugin::mode_cb, this);
-        // to transmit more data, I should make a mavros msg definition i think. See onboard_computer_status as an example
-
-        //morph_mode_sub = nh.subscribe("raw_cg", 10, &MorphPlugin::raw_cg_cb, this);
-        //morph_mode_sub = nh.subscribe("filtered_cg", 10, &MorphPlugin:filtered_cg_cb, this);
-        //morph_mode_sub = nh.subscribe("ct", 10, &MorphPlugin::ct_cb, this);
-        //morph_mode_sub = nh.subscribe("shutter", 10, &MorphPlugin::shutter_cb, this);
-        //morph_mode_sub = nh.subscribe("angles", 10, &MorphPlugin::angles_cb, this);
+        morph_mode_sub = nh.subscribe("status", 10, &MorphPlugin::status_cb, this);
     }
 
     Subscriptions get_subscriptions()
@@ -56,23 +48,21 @@ private:
     ros::NodeHandle nh;
     ros::Subscriber morph_mode_sub;
 
-    /*
-    void mode_cb(const std_msgs::UInt8::ConstPtr &req)//std_msgs::UInt8::ConstPtr &req)
-    {
-        std::cout << "(Helloworld message from morphstatus.cpp) Got Int : " << req->data <<  std::endl;
 
-        UAS_FCU(m_uas)->send_message_ignore_drop(req->data);
-    }
-    */
+    void status_cb(const mavros_msgs::MorphStatus::ConstPtr &req)//std_msgs::UInt8::ConstPtr &req)
+    {   
+        // recieved by mavros and sent over mavlink to fcu
 
-    void mode_cb(const mavros_msgs::MorphStatus::ConstPtr &req)//std_msgs::UInt8::ConstPtr &req)
-    {
-        uint8_t mode = req->mode;
-        std::cout << "(Helloworld message from morph_status.cpp) Got Int : " << mode <<  std::endl;
-        mavlink::common::msg::MORPH_STATUS status {};  // this was added later. Do i have to change any other files to make this work? yes. add MORPH_STATUS msg
-
-        status.mode = mode;//data;
-        // "data" is defeined in the type's header file (UInt8)
+        std::cout << "(Helloworld message from morph_status.cpp in mavros)";
+        mavlink::common::msg::MORPH_STATUS status {};  // this was added later. Do i have to change any other files to make this work? yes. add MORPH_STATUS msg       
+        
+        status.time_usec = req->header.stamp.toNSec() / 1000;                   //!< [microsecs]
+        status.mode = req->mode;
+        std::copy(req->angles.cbegin(), req->angles.cend(), status.angles.begin());
+        std::copy(req->raw_cg.cbegin(), req->raw_cg.cend(), status.raw_cg.begin());
+        std::copy(req->filt_cg.cbegin(), req->filt_cg.cend(), status.filt_cg.begin());
+        std::copy(req->ct.cbegin(), req->ct.cend(), status.ct.begin());
+        status.shutter_open = uint8_t(req->shutter_open);
 
         UAS_FCU(m_uas)->send_message_ignore_drop(status);
     }
