@@ -36,7 +36,7 @@ public:
     void initialize(UAS &uas_)
     {
         PluginBase::initialize(uas_);
-        morph_mode_sub = nh.subscribe("status", 10, &MorphPlugin::status_cb, this);
+        morph_status_sub = nh.subscribe("status", 10, &MorphPlugin::status_cb, this);
     }
 
     Subscriptions get_subscriptions()
@@ -46,7 +46,7 @@ public:
 
 private:
     ros::NodeHandle nh;
-    ros::Subscriber morph_mode_sub;
+    ros::Subscriber morph_status_sub;
 
 
     void status_cb(const mavros_msgs::MorphStatus::ConstPtr &req)//std_msgs::UInt8::ConstPtr &req)
