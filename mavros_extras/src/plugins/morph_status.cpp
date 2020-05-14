@@ -53,7 +53,6 @@ private:
     {   
         // recieved by mavros and sent over mavlink to fcu
 
-        std::cout << "(Helloworld message from morph_status.cpp in mavros)";
         mavlink::common::msg::MORPH_STATUS status {};  // this was added later. Do i have to change any other files to make this work? yes. add MORPH_STATUS msg       
         
         status.time_usec = req->header.stamp.toNSec() / 1000;                   //!< [microsecs]
